@@ -26,11 +26,6 @@ export default class BarrierStore {
     @observable lineStyle = undefined;
     @observable isInitialized = false;
     @observable initializePromise = new PendingPromise();
-    @observable hideBarrierLine = false;
-    @observable hideOffscreenLine = false;
-    @observable hideOffscreenBarrier = false;
-    @observable isSingleBarrier = false;
-
     _shadeState;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
@@ -67,8 +62,6 @@ export default class BarrierStore {
 
         this.HighPriceLine = this._high_barrier.connect(PriceLine);
         this.LowPriceLine = this._low_barrier.connect(PriceLine);
-
-        this.mainStore.chart._barriers.push(this);
     }
 
     @action.bound init() {
@@ -91,7 +84,7 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenBarrier, hideOffscreenLine, hidePriceLines, lineStyle, title, showOffscreenArrows, isSingleBarrier, opacityOnOverlap,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
@@ -103,16 +96,9 @@ export default class BarrierStore {
             if (isValidProp(high)) { this.high_barrier = high; }
             if (isValidProp(low)) { this.low_barrier = low; }
             if (onChange) { this.onBarrierChange = onChange; }
-            if (title) { this.title = title; }
             this.lineStyle = lineStyle;
-            this.hideBarrierLine = !!hideBarrierLine;
             this.hidePriceLines = !!hidePriceLines;
-            this.hideOffscreenLine = !!hideOffscreenLine;
-            this.hideOffscreenBarrier = !!hideOffscreenBarrier;
-            this.isSingleBarrier = !!isSingleBarrier;
         }));
-        if (opacityOnOverlap) { this.opacityOnOverlap = opacityOnOverlap; }
-        if (showOffscreenArrows) { this.showOffscreenArrows = showOffscreenArrows; }
     }
 
     @action.bound destructor() {
@@ -120,11 +106,6 @@ export default class BarrierStore {
         this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
         this._low_barrier.destructor();
-
-        const i = this.mainStore.chart._barriers.findIndex(b => b === this);
-        if (i !== -1) {
-            this.mainStore.chart._barriers.splice(i, 1);
-        }
     }
 
     get high_barrier() { return this._high_barrier.price; }
@@ -230,22 +211,6 @@ export default class BarrierStore {
     set draggable(value) {
         this._high_barrier.draggable = value;
         this._low_barrier.draggable = value;
-    }
-
-    get showOffscreenArrows() {
-        return this._high_barrier.showOffscreenArrows;
-    }
-
-    set showOffscreenArrows(value) {
-        this._high_barrier.showOffscreenArrows = value;
-    }
-
-    get opacityOnOverlap() {
-        return this._high_barrier.opacityOnOverlap;
-    }
-
-    set opacityOnOverlap(value) {
-        this._high_barrier.opacityOnOverlap = value;
     }
 
     _drawShadedArea = () => {

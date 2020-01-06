@@ -68,9 +68,6 @@ import Scale from '../../sass/icons/navigation-widgets/ic-scale-full.svg';
 import Zoomin from '../../sass/icons/navigation-widgets/ic-zoomin.svg';
 import Zoomout from '../../sass/icons/navigation-widgets/ic-zoomout.svg';
 
-import ArrowGreen from '../../sass/icons/arrows/ic-arrow-green.svg';
-import ArrowOrange from '../../sass/icons/arrows/ic-arrow-orange.svg';
-
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
 import CAD from '../../sass/icons/flags/cad.svg';
@@ -203,9 +200,6 @@ export const ZoominIcon = Wrapper(Zoomin);
 export const ZoomoutIcon = Wrapper(Zoomout);
 
 export const MetalIcon = Wrapper(Metal);
-
-export const ArrowGreenIcon = Wrapper(ArrowGreen);
-export const ArrowOrangeIcon = Wrapper(ArrowOrange);
 
 export const alertIconMap = {
     info: Wrapper(Info),
